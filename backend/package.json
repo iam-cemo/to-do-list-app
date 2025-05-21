@@ -1,0 +1,24 @@
+{
+  "name": "api-to-do-list-app",
+  "version": "1.0.0",
+  "description": "API REST d'une application de to do list avec Node JS & Express JS",
+  "keywords": [
+    "to",
+    "do",
+    "list",
+    "api",
+    "node",
+    "express"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iam-cemo/to-do-list-app.git"
+  },
+  "license": "ISC",
+  "author": "cemo",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
