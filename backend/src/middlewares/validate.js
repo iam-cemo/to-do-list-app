@@ -1,4 +1,5 @@
-import { body, query } from 'express-validator';
+import { body, query, validationResult } from 'express-validator';
+
 
 // Middleware de validation pour l'enregistrement des utilisateurs
 export const validateUser = [
@@ -15,18 +16,21 @@ export const validateUser = [
   }
 ];
 
+
 // Middleware de validation pour la création de tâches
 export const validateTask = [
   body('title').notEmpty().withMessage('Le titre est requis'),
   body('description').optional().isString(),
   body('dueDate').optional().isISO8601().withMessage('Format de date invalide'),
   body('priority')
+    .optional()
     .isIn(['low', 'medium', 'high'])
-    .withMessage('La priorité doit être basse, moyenne ou élevée'),
+    .withMessage('La priorité doit être low, medium ou high'),
   body('status')
+    .optional()
     .isIn(['to do', 'in progress', 'pending', 'completed'])
-    .withMessage('Le statut doit être "A faire", "En cours", "En attente" ou "Terminée"'),
-  body('category').optional().isString() .withMessage('La catégorie doit être une chaîne de caractères'),    
+    .withMessage('Le statut doit être \"to do\", \"in progress\", \"pending\" ou \"completed\"'),
+  body('category').optional().isString().withMessage('La catégorie doit être une chaîne de caractères'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

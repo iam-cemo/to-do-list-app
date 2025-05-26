@@ -4,19 +4,31 @@ import slugify from 'slugify';
 // Créer une tâche
 export const createTask = async (req, res) => {
   try {
-    const { title, description, dueDate, priority, category } = req.body;
+    const { title, description, dueDate, priority, category, status } = req.body;
+
+    if (!title) {
+      return res.status(400).json({ error: 'Le titre est requis.' });
+    }
+
     const task = new Task({
       title,
       description,
       dueDate,
       priority,
       category,
+      status: status || 'pending',
       user: req.user.id,
     });
-    await task.save();
-    res.status(201).json(task);
+
+    const savedTask = await task.save();
+    console.log('Tâche créée avec succès:', savedTask);
+    return res.status(201).json(savedTask); // <--- return ici !
   } catch (error) {
-    res.status(500).json({ error: 'Erreur lors de la création de la tâche' });
+    console.error('Erreur lors de la création de la tâche:', error);
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.slug) {
+      return res.status(400).json({ error: 'Une tâche avec ce titre existe déjà.' });
+    }
+    return res.status(500).json({ error: 'Erreur serveur lors de la création de la tâche.' });
   }
 };
 

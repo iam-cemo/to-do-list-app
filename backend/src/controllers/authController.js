@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import Task from '../models/Task.js';
 import { config } from '../config/config.js';
 
 // Inscription
@@ -45,7 +46,7 @@ export const logout = (req, res) => {
 // Suppression de compte
 export const deleteAccount = async (req, res) => {
   try {
-    const userId = req.user.id; // Depuis middleware auth
+    const userId = req.user.id; 
     await User.findByIdAndDelete(userId);
     await Task.deleteMany({ user: userId }); // Supprimer les tâches associées
     res.json({ message: 'Compte supprimé avec succès' });
