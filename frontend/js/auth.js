@@ -1,7 +1,7 @@
-// API Base URL
+// URL de base de l'API
 const API_BASE_URL = 'http://localhost:3000/api';
 
-// Toast notification function
+// Fonction de notification toast
 function showToast(message, type = 'success') {
     const toastContainer = document.querySelector('.toast-container');
     const toast = document.createElement('div');
@@ -26,7 +26,7 @@ function showToast(message, type = 'success') {
     });
 }
 
-// Form switching
+// Changement de formulaire
 document.querySelectorAll('.switch-form').forEach(link => {
     link.addEventListener('click', (e) => {
         e.preventDefault();
@@ -36,7 +36,7 @@ document.querySelectorAll('.switch-form').forEach(link => {
     });
 });
 
-// Login form submission
+// Soumission du formulaire de connexion
 document.getElementById('login-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('loginEmail').value;
@@ -57,14 +57,14 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
             localStorage.setItem('token', data.token);
             window.location.href = '/dashboard.html';
         } else {
-            showToast(data.message || 'Login failed', 'danger');
+            showToast(data.message || 'Échec de la connexion', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred. Please try again.', 'danger');
+        showToast('Une erreur est survenue. Veuillez réessayer.', 'danger');
     }
 });
 
-// Register form submission
+// Soumission du formulaire d'inscription
 document.getElementById('register-form').addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('registerEmail').value;
@@ -72,12 +72,12 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
     const confirmPassword = document.getElementById('confirmPassword').value;
 
     if (password !== confirmPassword) {
-        showToast('Passwords do not match', 'danger');
+        showToast('Les mots de passe ne correspondent pas', 'danger');
         return;
     }
 
     if (password.length < 8) {
-        showToast('Password must be at least 8 characters long', 'danger');
+        showToast('Le mot de passe doit contenir au moins 8 caractères', 'danger');
         return;
     }
 
@@ -93,17 +93,17 @@ document.getElementById('register-form').addEventListener('submit', async (e) =>
         const data = await response.json();
 
         if (response.ok) {
-            showToast('Registration successful! Please log in.', 'success');
+            showToast('Inscription réussie ! Veuillez vous connecter.', 'success');
             document.querySelector('[data-form="login"]').click();
         } else {
-            showToast(data.message || 'Registration failed', 'danger');
+            showToast(data.message || 'Échec de l\'inscription', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred. Please try again.', 'danger');
+        showToast('Une erreur est survenue. Veuillez réessayer.', 'danger');
     }
 });
 
-// Check authentication status on page load
+// Vérification de l'authentification au chargement de la page
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     if (token) {

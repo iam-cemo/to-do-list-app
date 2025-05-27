@@ -1,15 +1,15 @@
-/* General Styles */
+/* Styles Généraux */
 body {
     font-family: 'Poppins', sans-serif;
 }
 
-/* Auth Pages */
+/* Pages d'Authentification */
 .auth-container {
     width: 100%;
     max-width: 400px;
 }
 
-/* Task Cards */
+/* Cartes des Tâches */
 .task-card {
     transition: transform 0.2s ease-in-out;
     cursor: pointer;
@@ -40,7 +40,7 @@ body {
     color: white;
 }
 
-/* Buttons and Interactive Elements */
+/* Boutons et Éléments Interactifs */
 .btn {
     font-weight: 500;
     padding: 0.5rem 1rem;
@@ -59,7 +59,7 @@ body {
     transform: translateY(-1px);
 }
 
-/* Form Controls */
+/* Contrôles de Formulaire */
 .form-control, .form-select {
     border-radius: 0.5rem;
     border: 1px solid #dee2e6;
@@ -71,12 +71,12 @@ body {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Toast Notifications */
+/* Notifications Toast */
 .toast {
     border-radius: 0.5rem;
 }
 
-/* Responsive Grid */
+/* Grille Responsive */
 @media (min-width: 768px) {
     .task-grid {
         display: grid;
@@ -85,13 +85,13 @@ body {
     }
 }
 
-/* Accessibility */
+/* Accessibilité */
 .btn:focus, .form-control:focus {
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
     outline: none;
 }
 
-/* Loading States */
+/* États de Chargement */
 .loading {
     opacity: 0.7;
     pointer-events: none;

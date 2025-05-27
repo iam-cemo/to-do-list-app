@@ -1,7 +1,7 @@
-// API Base URL
+// URL de base de l'API
 const API_BASE_URL = 'http://localhost:3000/api';
 
-// Check authentication
+// Vérification de l'authentification
 function checkAuth() {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -11,7 +11,7 @@ function checkAuth() {
     return token;
 }
 
-// Toast notification function
+// Fonction de notification toast
 function showToast(message, type = 'success') {
     const toastContainer = document.querySelector('.toast-container');
     const toast = document.createElement('div');
@@ -36,43 +36,46 @@ function showToast(message, type = 'success') {
     });
 }
 
-// Format date
+// Formatage de la date
 function formatDate(dateString) {
     if (!dateString) return '';
     const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
+    return date.toLocaleDateString('fr-FR', {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
     });
 }
 
-// Create task card
+// Création d'une carte de tâche
 function createTaskCard(task) {
     const card = document.createElement('div');
     card.className = 'col-md-6 col-lg-4';
     card.innerHTML = `
         <div class="card task-card h-100">
             <div class="card-body">
-                <span class="badge priority-${task.priority} priority-badge">${task.priority}</span>
+                <span class="badge priority-${task.priority} priority-badge">${
+                    task.priority === 'low' ? 'Basse' :
+                    task.priority === 'medium' ? 'Moyenne' : 'Haute'
+                }</span>
                 <h5 class="card-title mb-3">${task.title}</h5>
                 <p class="card-text">${task.description || ''}</p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
-                    <small class="text-muted">Due: ${formatDate(task.dueDate)}</small>
+                    <small class="text-muted">Échéance: ${formatDate(task.dueDate)}</small>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" ${task.completed ? 'checked' : ''}
                             onchange="toggleTaskStatus('${task._id}', this.checked)">
-                        <label class="form-check-label">Complete</label>
+                        <label class="form-check-label">Terminée</label>
                     </div>
                 </div>
             </div>
             <div class="card-footer bg-transparent border-top-0">
                 <div class="d-flex justify-content-end gap-2">
                     <button class="btn btn-sm btn-outline-primary" onclick="editTask('${task._id}')">
-                        <i class="bi bi-pencil"></i> Edit
+                        <i class="bi bi-pencil"></i> Modifier
                     </button>
                     <button class="btn btn-sm btn-outline-danger" onclick="deleteTask('${task._id}')">
-                        <i class="bi bi-trash"></i> Delete
+                        <i class="bi bi-trash"></i> Supprimer
                     </button>
                 </div>
             </div>
@@ -81,7 +84,7 @@ function createTaskCard(task) {
     return card;
 }
 
-// Fetch and display tasks
+// Récupération et affichage des tâches
 async function fetchTasks() {
     const token = checkAuth();
     if (!token) return;
@@ -101,7 +104,7 @@ async function fetchTasks() {
             if (tasks.length === 0) {
                 tasksGrid.innerHTML = `
                     <div class="col-12 text-center">
-                        <p class="text-muted">No tasks found. Add your first task!</p>
+                        <p class="text-muted">Aucune tâche trouvée. Ajoutez votre première tâche !</p>
                     </div>
                 `;
                 return;
@@ -111,14 +114,14 @@ async function fetchTasks() {
                 tasksGrid.appendChild(createTaskCard(task));
             });
         } else {
-            showToast('Failed to fetch tasks', 'danger');
+            showToast('Échec de la récupération des tâches', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred while fetching tasks', 'danger');
+        showToast('Une erreur est survenue lors de la récupération des tâches', 'danger');
     }
 }
 
-// Add new task
+// Ajout d'une nouvelle tâche
 document.getElementById('addTaskForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const token = checkAuth();
@@ -143,19 +146,19 @@ document.getElementById('addTaskForm').addEventListener('submit', async (e) => {
         });
 
         if (response.ok) {
-            showToast('Task added successfully');
+            showToast('Tâche ajoutée avec succès');
             bootstrap.Modal.getInstance(document.getElementById('addTaskModal')).hide();
             e.target.reset();
             fetchTasks();
         } else {
-            showToast('Failed to add task', 'danger');
+            showToast('Échec de l\'ajout de la tâche', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred while adding the task', 'danger');
+        showToast('Une erreur est survenue lors de l\'ajout de la tâche', 'danger');
     }
 });
 
-// Edit task
+// Modification d'une tâche
 async function editTask(taskId) {
     const token = checkAuth();
     if (!token) return;
@@ -179,14 +182,14 @@ async function editTask(taskId) {
             const modal = new bootstrap.Modal(document.getElementById('editTaskModal'));
             modal.show();
         } else {
-            showToast('Failed to fetch task details', 'danger');
+            showToast('Échec de la récupération des détails de la tâche', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred while fetching task details', 'danger');
+        showToast('Une erreur est survenue lors de la récupération des détails de la tâche', 'danger');
     }
 }
 
-// Update task
+// Mise à jour d'une tâche
 document.getElementById('editTaskForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const token = checkAuth();
@@ -212,20 +215,20 @@ document.getElementById('editTaskForm').addEventListener('submit', async (e) => 
         });
 
         if (response.ok) {
-            showToast('Task updated successfully');
+            showToast('Tâche mise à jour avec succès');
             bootstrap.Modal.getInstance(document.getElementById('editTaskModal')).hide();
             fetchTasks();
         } else {
-            showToast('Failed to update task', 'danger');
+            showToast('Échec de la mise à jour de la tâche', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred while updating the task', 'danger');
+        showToast('Une erreur est survenue lors de la mise à jour de la tâche', 'danger');
     }
 });
 
-// Delete task
+// Suppression d'une tâche
 async function deleteTask(taskId) {
-    if (!confirm('Are you sure you want to delete this task?')) return;
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?')) return;
 
     const token = checkAuth();
     if (!token) return;
@@ -239,17 +242,17 @@ async function deleteTask(taskId) {
         });
 
         if (response.ok) {
-            showToast('Task deleted successfully');
+            showToast('Tâche supprimée avec succès');
             fetchTasks();
         } else {
-            showToast('Failed to delete task', 'danger');
+            showToast('Échec de la suppression de la tâche', 'danger');
         }
     } catch (error) {
-        showToast('An error occurred while deleting the task', 'danger');
+        showToast('Une erreur est survenue lors de la suppression de la tâche', 'danger');
     }
 }
 
-// Toggle task status
+// Basculer le statut d'une tâche
 async function toggleTaskStatus(taskId, completed) {
     const token = checkAuth();
     if (!token) return;
@@ -265,25 +268,25 @@ async function toggleTaskStatus(taskId, completed) {
         });
 
         if (response.ok) {
-            showToast('Task status updated');
+            showToast('Statut de la tâche mis à jour');
         } else {
-            showToast('Failed to update task status', 'danger');
-            fetchTasks(); // Refresh to show correct state
+            showToast('Échec de la mise à jour du statut', 'danger');
+            fetchTasks(); // Rafraîchir pour montrer l'état correct
         }
     } catch (error) {
-        showToast('An error occurred while updating task status', 'danger');
-        fetchTasks(); // Refresh to show correct state
+        showToast('Une erreur est survenue lors de la mise à jour du statut', 'danger');
+        fetchTasks(); // Rafraîchir pour montrer l'état correct
     }
 }
 
-// Filter tasks
+// Filtrer les tâches
 function filterTasks() {
     const priority = document.getElementById('priorityFilter').value;
     const status = document.getElementById('statusFilter').value;
     const tasks = document.querySelectorAll('.task-card');
 
     tasks.forEach(task => {
-        const taskPriority = task.querySelector('.priority-badge').textContent;
+        const taskPriority = task.querySelector('.priority-badge').textContent.toLowerCase();
         const taskCompleted = task.querySelector('.form-check-input').checked;
         const matchesPriority = !priority || taskPriority === priority;
         const matchesStatus = !status || 
@@ -294,19 +297,19 @@ function filterTasks() {
     });
 }
 
-// Logout
+// Déconnexion
 document.getElementById('logoutBtn').addEventListener('click', (e) => {
     e.preventDefault();
     localStorage.removeItem('token');
     window.location.href = '/index.html';
 });
 
-// Initialize
+// Initialisation
 document.addEventListener('DOMContentLoaded', () => {
     checkAuth();
     fetchTasks();
 
-    // Set up filter listeners
+    // Configuration des écouteurs de filtres
     document.getElementById('priorityFilter').addEventListener('change', filterTasks);
     document.getElementById('statusFilter').addEventListener('change', filterTasks);
 });
