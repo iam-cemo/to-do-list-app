@@ -18,10 +18,7 @@ process.on('uncaughtException', handleFatalError('Exception non capturée'));
 
 // Connexion à MongoDB
 mongoose
-  .connect(config.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(config.MONGODB_URI)
   .then(() => console.log('Connecté à MongoDB'))
   .catch((err) => {
     console.error('Erreur de connexion à MongoDB:', err);
